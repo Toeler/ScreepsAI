@@ -1,0 +1,12 @@
+{
+  "name": "screeps-ai",
+  "version": "1.0.0",
+  "description": "AI for Screeps",
+  "dependencies": {
+    "screeps-typescript-declarations": "^3.0.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-screeps": "^1.2.1"
+  }
+}
