@@ -3,9 +3,18 @@
 /// <reference path="../node_modules/screeps-typescript-declarations/dist/screeps.d.ts" />
 
 require('Structure.prototype');
+require('Room.prototype');
+require('Room.Controller.prototype');
+require('Creep.prototype');
+require('Creep.Harvester.prototype'); // TODO: Dynamically load these based on creeps in play
+require('Creep.Miner.prototype'); // TODO: Dynamically load these based on creeps in play
+require('Creep.Courier.prototype'); // TODO: Dynamically load these based on creeps in play
+require('Creep.Builder.prototype'); // TODO: Dynamically load these based on creeps in play
+require('Creep.Upgrader.prototype'); // TODO: Dynamically load these based on creeps in play
+require('Creep.Scavenger.prototype'); // TODO: Dynamically load these based on creeps in play
 
-const CreepFactory = require('CreepFactory');
-const RoleController = require('RoleController');
+//const CreepFactory = require('CreepFactory');
+//const RoleController = require('RoleController');
 
 Object.prototype[Symbol.iterator] = function*() {
 	for(let key of Object.keys(this)) {
@@ -13,14 +22,12 @@ Object.prototype[Symbol.iterator] = function*() {
 	}
 }
 
-_.isNil = function() {
-	return _.isUndefined.apply(this, arguments) || _.isNull.apply(this, arguments);
-}
-
-Room.prototype.getFriendlyCreeps = function(type) {
-	return this.find(FIND_MY_CREEPS, {
-		filter: (creep) => _.isNil(type) || creep.memory.role == type
-	});
+if (!_.isNil) {
+	_.isNil = function() {
+		return _.isUndefined.apply(this, arguments) || _.isNull.apply(this, arguments);
+	}
+} else {
+	console.log(_.VERSION);
 }
 
 Room.prototype.countFriendly = function(type, includeSpawning, includeQueued) {

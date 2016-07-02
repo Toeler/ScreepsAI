@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 			options: {
                 email: screepsCreds.email,
                 password: screepsCreds.password,
-                branch: 'default',
+                branch: 'proto',
                 ptr: false
             },
             dist: {
