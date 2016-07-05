@@ -6,6 +6,7 @@
     "screeps-typescript-declarations": "^3.0.0"
   },
   "devDependencies": {
+    "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-screeps": "^1.2.1"
   }

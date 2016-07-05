@@ -1,12 +1,22 @@
 module.exports = function(grunt) {
 	var screepsCreds = require('./screeps.json');
     grunt.initConfig({
+		clean: [
+			'dist/'
+		],
 		copy: {
 			main: {
 				expand: true,
-				cwd: 'src',
+				cwd: 'src/',
 				src: '**',
 				dest: 'dist/',
+				flatten: true,
+    			filter: 'isFile',
+				options: {
+					process: function (content, srcpath) {
+						return content.replace(/(require\(['`]).*\/(.*)(['`]\))/g, '$1$2$3');
+					},
+				},
 			},
 		},
         screeps: {
@@ -22,9 +32,10 @@ module.exports = function(grunt) {
         }
     });
 
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-screeps');
 
-	grunt.registerTask('build', ['copy']);
+	grunt.registerTask('build', ['clean', 'copy']);
 	grunt.registerTask('deploy', ['build', 'screeps']);
 }
