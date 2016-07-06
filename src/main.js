@@ -16,6 +16,8 @@ require('Source');
 module.exports.loop = function() {
 	game.setup();
 
+	Game.startStats();
+
 	for (let name in Memory.creeps) {
 		if (!Game.creeps[name]) {
 			delete Memory.creeps[name];
@@ -32,4 +34,6 @@ module.exports.loop = function() {
 	for (let room of each(Game.rooms)) {
 		room.tick();
 	}
+
+	Game.endStats();
 }

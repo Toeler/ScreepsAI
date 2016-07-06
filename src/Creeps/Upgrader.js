@@ -80,34 +80,3 @@ Object.assign(Room.prototype, {
 		return this._upgraderWorkParts;
 	}
 });
-
-/* -------------------------------------------------- SPAWN CODE -------------------------------------------------- */
-/*Object.assign(StructureSpawn.prototype, {
-	buildUpgrader(availableEnergy) {
-		const body = [MOVE, WORK, WORK, CARRY];
-		const maxEnergyProduced = this.room.getMaxEnergyProducedPerTick();
-
-		let workParts = 2;
-		let cost = Game.calculateCost(body);
-		let workPartsNeeded = maxEnergyProduced - this.room.getUpgraderWorkPartCount();
-		if (this.room.controller.level === 8) {
-			workPartsNeeded = Math.min(15, workPartsNeeded);
-		}
-		if (this.room.controller.pos.getFreeEdges() > 1) {
-			workPartsNeeded = Math.min(workPartsNeeded, maxEnergyProduced / 2);
-		}
-
-		while (cost < availableEnergy && workParts < workPartsNeeded) {
-			body.push(WORK);
-			workParts++;
-			cost = Game.calculateCost(body);
-		}
-
-		while (cost > availableEnergy) {
-			body.pop();
-			cost = Game.calculateCost(body);
-		}
-
-		return this.spawnNewCreep(body, { role: Creep.role.upgrader });
-	}
-});*/

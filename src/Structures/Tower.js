@@ -1,5 +1,5 @@
 Object.assign(StructureTower.prototype, {
-	tick() {
+	work() {
 		if (this.room.hasHostileCreeps() && this.isNotEmpty()) {
 			this.attack(this.pos.findClosestByRange(this.room.getHostileCreeps()));
 		} else if (this.getEnergyPercentage() > 50) {

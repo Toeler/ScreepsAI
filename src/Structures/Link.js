@@ -1,5 +1,5 @@
 Object.assign(StructureLink.prototype, {
-	tick() {
+	work() {
 		const shouldTransfer = !this.isControllerLink() && !this.cooldown;
 		const controllerLink = this.room.getControllerLink();
 		const controllerLinkNeedsEnergy = controllerLink && controllerLink.energy < 100;

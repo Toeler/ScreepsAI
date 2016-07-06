@@ -1,5 +1,5 @@
 Object.assign(StructureSpawn.prototype, {
-	tick() {
+	work() {
 		if (this.spawning) {
 			return;
 		}
@@ -11,29 +11,22 @@ Object.assign(StructureSpawn.prototype, {
 		
 		if (availableEnergy >= 300 && availableEnergy < maxEnergy) {
 			if (harvesterCount < 1) {
-				//this.buildHarvester(availableEnergy);
 				this.buildCreep(Creep.role.harvester, availableEnergy);
 			} else if (this.room.needsCouriers()) {
-				//this.buildCourier(availableEnergy);
 				this.buildCreep(Creep.role.courier, availableEnergy);
-			}/* else if (this.room.needsRoadWorkers()) {
-				this.buildRoadWorker(availableEnergy);
-			}*/
+			} else if (this.room.needsRoadWorkers()) {
+				this.buildCreep(Creep.role.roadWorker, availableEnergy);
+			}
 		} else if (availableEnergy === maxEnergy) {
 			if (this.room.needsHarvesters()) {
-				//this.buildHarvester(availableEnergy);
 				this.buildCreep(Creep.role.harvester, availableEnergy);
 			} else if (this.room.needsCouriers()) {
-				//this.buildCourier(availableEnergy);
 				this.buildCreep(Creep.role.courier, availableEnergy);
 			} else if (this.room.needsUpgraders()) {
-				//this.buildUpgrader(availableEnergy);
 				this.buildCreep(Creep.role.upgrader, availableEnergy);
 			} else if (this.room.needsMailmen()) {
-				//this.buildMailman(availableEnergy);
 				this.buildCreep(Creep.role.mailman, availableEnergy);
 			} else if (this.room.needsBuilders()) {
-				//this.buildBuilder(availableEnergy);
 				this.buildCreep(Creep.role.builder, availableEnergy);
 			//} else if (this.needsScouts()) {
 			//	this.buildScout(availableEnergy);
@@ -47,6 +40,8 @@ Object.assign(StructureSpawn.prototype, {
 			//	this.buildReserver(availableEnergy);
 			//} else if (this.room.needsRemoteHarvesters()) {
 			//	this.buildRemoteHarvester();
+			} else if (this.room.needsRoadWorkers()) {
+				this.buildCreep(Creep.role.roadWorker, availableEnergy);
 			} else {
 				this.buildExtensions();
 			}

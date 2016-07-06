@@ -1,6 +1,7 @@
 Object.assign(Room.prototype, {
 	tick() {
 		Game.debug(`Tick room ${this.name}`);
+		const startCpu =  Game.cpu.getUsed();
 		for (let structure of this.getMyStructures()) {
 			structure.tick();
 		}
@@ -19,6 +20,18 @@ Object.assign(Room.prototype, {
 				this.placeStructures();
 			}
 		}
+
+		this.submitStat('room_energy', this.getEnergyAvailable());
+		this.submitStat('hostiles', this.getHostileCreeps().length);
+		const creepCounts = _(this.getMyCreeps()).countBy('memory.role').valueOf();
+		for (let role of Object.keys(creepCounts)) {
+			this.submitStat('creeps', creepCounts[role], { role: _.capitalize(role) });
+		}
+		this.submitStat('cpu_used', Game.cpu.getUsed() - startCpu);
+	},
+
+	submitStat(metric, values, tags = {}) {
+		Game.submitStat(metric, values, _.merge({ room: this.name }, tags));
 	},
 
 	isOwnedByMe() {
@@ -31,6 +44,10 @@ Object.assign(Room.prototype, {
 
 	getMaxEnergy() {
 		return this.energyCapacityAvailable;
+	},
+
+	getEnergyAvailable() {
+		return this.energyAvailable;
 	},
 
 	getCenterPosition() {
@@ -61,6 +78,24 @@ Object.assign(Room.prototype, {
 
 	getMostDamagedStructure() {
 		return this.getDamagedStructures()[0];
+	},
+
+	getRoads() {
+		if (!this._roads) {
+			this._roads = _.filter(this.getStructures(), 'structureType', STRUCTURE_ROAD);
+		}
+		return [...this._roads];
+	},
+
+	getDamagedRoads() {
+		if (!this._damagedRoads) {
+			this._damagedRoads = _.filter(this.getRoads(), (road) => road.getHitsPercentage() < 50);
+		}
+		return [...this._damagedRoads];
+	},
+
+	hasDamagedRoads() {
+		return this.getDamagedRoads().length > 0;
 	},
 
 	getMyStructures() {
@@ -318,7 +353,7 @@ Object.assign(Room.prototype, {
 	getStructuresNeedingEnergyDelivery() {
 		if (!this._structuresNeedingEnergyDelivery) {
 			this._structuresNeedingEnergyDelivery = _.filter(this.getMyStructures(), (structure) => 
-				!structure.isLink() && !structure.isSourceTower() && structure.isNotFull()
+				!structure.isLink() && (!structure.isSourceTower() || structure.getEnergyPercentage() < 30) && structure.isNotFull()
 			);
 		}
 		return [...this._structuresNeedingEnergyDelivery];

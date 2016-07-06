@@ -7,6 +7,18 @@ Object.assign(Structure.prototype, {
 		if (this.work) {
 			this.work();
 		}
+
+		if (!_.isUndefined(this.getEnergy())) {
+			this.room.submitStat('structure_energy', this.getEnergy(), { id: this.id, type: this.structureType });
+		}
+	},
+
+	getEnergy() {
+		if (this.energyCapacity) {
+			return this.energy;
+		} else if (this.storeCapacity) {
+			return _.sum(this.store);
+		}
 	},
 
 	isFull() {

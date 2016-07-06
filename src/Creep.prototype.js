@@ -1,6 +1,6 @@
 Creep.role = {};
 Creep.definitions = {};
-['Harvester', 'Courier', 'Upgrader', 'Mailman', 'Builder'].forEach((module) => {
+['Harvester', 'Courier', 'Upgrader', 'Mailman', 'Builder', 'RoadWorker'].forEach((module) => {
 	require(`./Creeps/${module}`);
 });
 
@@ -89,12 +89,14 @@ Object.assign(Creep.prototype, {
 
 	moveToAndBuild(target) {
 		const range = this.getRangeTo(target);
+		let result;
 		if (range > 1) {
-			this.moveTo(target);
+			result = this.moveTo(target);
 		} 
 		if (range <= 3) {
-			return this.build(target);
+			result = this.build(target);
 		}
+		return result;
 	},
 
 	moveToAndDismantle(target) {
@@ -237,6 +239,8 @@ Object.assign(Creep.prototype, {
 	shouldBeRecycled() {
 		if (this.memory.role === Creep.role.builder) {
 			return this.room.getConstructionSiteCount() < 1;
+		} else if (this.memory.role === Creep.role.roadWorker) {
+			return !this.room.hasDamagedRoads();
 		}
 		return false;
 	},
@@ -260,7 +264,7 @@ Object.assign(StructureSpawn.prototype, {
 		let cost = Game.calculateCost(body);
 
 		let newPartIndex = 0;
-		while (cost < availableEnergy && definition.addon[newPartIndex]) {
+		while (cost < availableEnergy && definition.addon && definition.addon[newPartIndex]) {
 			const addon = definition.addon[newPartIndex];
 			if (!definition.hasRoomFor || !definition.hasRoomFor[addon] || definition.hasRoomFor[addon].call(this, body)) {
 				body = body.concat(definition.addon[newPartIndex]);
